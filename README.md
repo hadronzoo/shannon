@@ -67,6 +67,13 @@ probable. Compare the above behavior with the result of using a
 (compress 999999 u) ; ⇒ compresses to 3 bytes
 ```
 
+## To Do
+
+- Integration tests
+- Tagged language strings
+- Tagged custom types
+- Documentation
+
 ## License
 
 Copyright © 2013--2014 Joshua B. Griffith.
