@@ -135,6 +135,7 @@
     (swap! coder (fn [coder]
                    (encode-symbol coder distribution sym))))
   (decode-symbol [_ distribution]
+    ;; Fix this hack now that the library is no longer monadic
     (let [sym (atom nil)]
       (swap! coder (fn [coder]
                      (let [[s c] (decode-symbol coder distribution)]

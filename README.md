@@ -67,9 +67,9 @@ probable. Compare the above behavior with the result of using a
 (compress 999999 u) ; ⇒ compresses to 3 bytes
 ```
 
-Non-atomic coders can be composed. For example, to encode a sequence
-of up to 20 integers with the distribution previously defined by `z`,
-where the number of integers is uniformly distributed:
+Coders are composeable. For example, to encode a sequence of up to 20
+integers with the distribution previously defined by `z`, where the
+number of integers is uniformly distributed:
 
 ```clj
 (def count-coder (uniform (inc 20)))
@@ -79,11 +79,26 @@ where the number of integers is uniformly distributed:
 (decompress o arr-coder)                ; ⇒ (0 1 2 3 4 5 6 7 8 9 10 11 12)
 ```
 
+Here's a coder for a tuple consisting of an english string, the
+variable sequence of integers coded by `arr-coder` above, and a date:
+
+```clj
+(use 'shannon.base-coders)
+(def tuple-coder (fixed-array [english-coder arr-coder date-coder]))
+(def t ["Hello world!" (range 10) #inst "2014-01-01T00:00:00.000Z"])
+
+(def o (compress t tuple-coder))
+; ⇒ compresses to 24 bytes
+
+(decompress o tuple-coder)
+; ⇒ ("Hello world!" (0 1 2 3 4 5 6 7 8 9) #inst "2014-01-01T00:00:00.000-00:00")
+```
+
 Compare this with the default coder, which has to store type
 information and uses integers with Long ranges:
 
 ```clj
-(compress (range 13)) ; ⇒ compresses to 22 bytes
+(compress t) ; ⇒ compresses to 34 bytes
 ```
 
 ## To Do
@@ -91,6 +106,7 @@ information and uses integers with Long ranges:
 - Integration tests
 - Tagged language strings
 - Tagged custom types
+- Caching
 - Documentation
 
 ## License
