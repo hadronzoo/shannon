@@ -106,7 +106,7 @@ information and uses integers with Long ranges:
 - Integration tests
 - Tagged language strings
 - Tagged custom types
-- Caching
+- Caching / adaptive coding
 - Documentation
 
 ## License

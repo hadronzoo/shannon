@@ -1,5 +1,5 @@
 (defproject com.joshuagriffith/shannon "0.2.0-SNAPSHOT"
-  :description "Extensible arithmetic coding toolkit"
+  :description "Arithmetic coding library for Clojure and Clojurescript"
   :url "https://github.com/hadronzoo/shannon"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
