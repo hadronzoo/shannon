@@ -1,6 +1,6 @@
 # Shannon [![Build Status](https://travis-ci.org/hadronzoo/shannon.png?branch=master)](https://travis-ci.org/hadronzoo/shannon)
 
-An extensible arithmetic coding toolkit for Clojure and Clojurescript.
+Arithmetic coding library for Clojure and Clojurescript.
 
 ## Artifacts
 

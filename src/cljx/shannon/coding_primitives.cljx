@@ -30,9 +30,9 @@
   Codeable
   (encode [_ scoder syms]
     (loop [c coders, s syms]
-      (if c (do (encode (first c) scoder (first s))
-                (recur (next c) (next s)))
-          nil)))
+      (when c
+        (encode (first c) scoder (first s))
+        (recur (next c) (next s)))))
   (decode [_ scoder]
     (map (fn [c] (decode c scoder)) coders)))
 

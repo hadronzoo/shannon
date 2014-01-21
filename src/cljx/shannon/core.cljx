@@ -59,9 +59,9 @@
   (let [r (not i)]
     (write! bits i)
     (loop [j s]
-      (if (pos? j)
-        (do (write! bits r)
-            (recur (dec j))))))
+      (when (pos? j)
+        (write! bits r)
+        (recur (dec j)))))
   bits)
 
 (deftype ArithmeticCoder #+clj [^double a ^double b ^long s ^double z bits]

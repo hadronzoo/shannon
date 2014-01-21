@@ -49,8 +49,7 @@
                 (+ (* a y0) (* b y1)))))
           (approx n)))))
 
-(def ^:private nth-harmonic
-  (memoize (fn [n] (harmonic-number n))))
+(def ^:private nth-harmonic (memoize harmonic-number))
 
 (defn zipf-pmf
   #+clj [^long k ^long N]
@@ -68,8 +67,7 @@
    (>= k N) 1.
    :else (/ (harmonic-number k) (nth-harmonic N))))
 
-(def ^:private zipf-breakpoint
-  (memoize (fn [k N] (zipf-cdf k N))))
+(def ^:private zipf-breakpoint (memoize zipf-cdf))
 
 (defn inverse-zipf-cdf
   #+clj [^double p ^long N]
@@ -122,10 +120,10 @@
 (deftype ZipfDistribution [N]
   DiscreteDistribution
   (next-lower [_ k]
-    (if (zero? k) nil (dec k)))
+    (when-not (zero? k) (dec k)))
 
   (next-higher [_ k]
-    (if (>= k (dec N)) nil (inc k)))
+    (when-not (>= k (dec N)) (inc k)))
 
   (cdf [_ k]
     (check-bounded-cdf k N)
@@ -142,10 +140,10 @@
 (deftype UniformDistribution [N]
   DiscreteDistribution
   (next-lower [_ k]
-    (if (zero? k) nil (dec k)))
+    (when-not (zero? k) (dec k)))
 
   (next-higher [_ k]
-    (if (>= k (dec N)) nil (inc k)))
+    (when-not (>= k (dec N)) (inc k)))
 
   (cdf [_ k]
     (check-bounded-cdf k N)
@@ -168,7 +166,7 @@
 (deftype GeometricDistribution [mu]
   DiscreteDistribution
   (next-lower [_ k]
-    (if (zero? k) nil (dec k)))
+    (when-not (zero? k) (dec k)))
 
   (next-higher [_ k]
     (inc k))
@@ -254,10 +252,10 @@
       (let [d0 (benford-inverse-cdf 0.5 min_d)]
         (reify DiscreteDistribution
           (next-lower [_ d]
-            (if (<= d min_d) nil (dec d)))
+            (when-not (<= d min_d) (dec d)))
 
           (next-higher [_ d]
-            (if (>= d max_d) nil (inc d)))
+            (when-not (>= d max_d) (inc d)))
 
           (cdf [_ d]
             {:pre [(<= min_d d max_d)]}
@@ -283,7 +281,7 @@
   ([m f] (zipmap (map f (vals m)) (keys m))))
 
 (defn custom-distribution [prs]
-  (let [nzprs (select-keys prs (for [[k v] prs :when (> v 0)] k))
+  (let [nzprs (select-keys prs (for [[k v] prs :when (pos? v)] k))
         norm-c (/ (reduce + (vals nzprs)))
         pdf (into (sorted-map)
                   (zipmap (keys nzprs) (map #(+ (* norm-c %)) (vals nzprs))))
@@ -294,10 +292,10 @@
     (reify DiscreteDistribution
       (next-higher [_ x]
         (let [i (get key-indices x)]
-          (if (< i (dec (count key-vec))) (nth key-vec (inc i)) nil)))
+          (when (< i (dec (count key-vec))) (nth key-vec (inc i)))))
       (next-lower [_ x]
         (let [i (get key-indices x)]
-          (if (zero? i) nil (nth key-vec (dec i)))))
+          (when-not (zero? i) (nth key-vec (dec i)))))
       (cdf [_ x]
         (get cdf x))
       (inverse-cdf [_ p]
