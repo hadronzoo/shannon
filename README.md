@@ -109,6 +109,21 @@ information and uses integers with Long ranges:
 - Caching / adaptive coding
 - Documentation
 
+## References
+
+- [mathematicalmonk](https://www.youtube.com/user/mathematicalmonk)
+  has an
+  [information theory primer](https://www.youtube.com/watch?v=UrefKMSEuAI&list=PLE125425EC837021F),
+  which includes a
+  [detailed walk-through of writing a practical arithmetic coder](https://www.youtube.com/watch?v=ouYV3rBtrTI&list=PLE125425EC837021F&index=41)
+- [A New Approximation Formula for Computing the N-th Harmonic Number](http://www.seriesmathstudy.com/sms/ApproximateFormulaHarmonicNum)
+- [Coefficients for the Lanczos Approximation to the Gamma Function](http://mrob.com/pub/ries/lanczos-gamma.html)
+- [Information Theory, Inference and Learning Algorithms](http://www.inference.phy.cam.ac.uk/mackay/itila/book.html) by David J. C. MacKay. Chapter 6 has an overview of stream coding.
+- [Numerical Recipes: The Art of Scientific Computing](http://www.nr.com/)
+- Probability Theory: The Logic of Science by E. T. Jaynes
+- [MIT 6.050J: Information and Entropy](http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-050j-information-and-entropy-spring-2008/index.htm)
+- [MIT 6.450: Principles of Digital Communications I](http://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-450-principles-of-digital-communications-i-fall-2006/index.htm)
+
 ## License
 
 Copyright © 2013–2014 Joshua B. Griffith.
