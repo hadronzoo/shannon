@@ -13,7 +13,7 @@ your `pom.xml`:
 ```xml
 <repository>
   <id>clojars.org</id>
-  <url>http://clojars.org/repo</url>
+  <url>http://releases.clojars.org/repo</url>
 </repository>
 ```
 
@@ -58,7 +58,7 @@ the first million integers:
 As expected, smaller numbers require less space than larger numbers,
 because the Zipf distribution assumes that smaller numbers are more
 probable. Compare the above behavior with the result of using a
-[uniform distribution](http://en.wikipedia.org/wiki/Uniform_distribution_(discrete)):
+[uniform distribution](http://en.wikipedia.org/wiki/Uniform_distribution_%28discrete%29):
 
 ```clj
 (def u (uniform 1000000))
@@ -76,7 +76,7 @@ probable. Compare the above behavior with the result of using a
 
 ## License
 
-Copyright © 2013--2014 Joshua B. Griffith.
+Copyright © 2013–2014 Joshua B. Griffith.
 
 Distributed under the Eclipse Public License either version 1.0 or (at
 your option) any later version.
