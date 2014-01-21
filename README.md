@@ -20,7 +20,7 @@ your `pom.xml`:
 Or with Leiningen:
 
 ```clj
-[com.joshuagriffith/shannon "0.1.0"]
+[com.joshuagriffith/shannon "0.1.1"]
 ```
 
 ## Usage
@@ -65,6 +65,25 @@ probable. Compare the above behavior with the result of using a
 
 (compress      0 u) ; ⇒ compresses to 3 bytes
 (compress 999999 u) ; ⇒ compresses to 3 bytes
+```
+
+Non-atomic coders can be composed. For example, to encode a sequence
+of up to 20 integers with the distribution previously defined by `z`,
+where the number of integers is uniformly distributed:
+
+```clj
+(def count-coder (uniform (inc 20)))
+(def arr-coder (variable-array z count-coder))
+
+(def o (compress (range 13) arr-coder)) ; ⇒ compresses to 11 bytes
+(decompress o arr-coder)                ; ⇒ (0 1 2 3 4 5 6 7 8 9 10 11 12)
+```
+
+Compare this with the default coder, which has to store type
+information and uses integers with Long ranges:
+
+```clj
+(compress (range 13)) ; ⇒ compresses to 22 bytes
 ```
 
 ## To Do

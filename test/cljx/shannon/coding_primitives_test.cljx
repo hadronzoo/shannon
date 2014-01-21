@@ -31,6 +31,6 @@
   (testing "transform"
     (test-coder (transform (uniform 1) inc dec) [-1]))
   (testing "variable array"
-    (test-coder (variable-array (uniform 10) (uniform 10)) [(range 7)]))
+    (test-coder (variable-array (uniform 100) (zipf 100)) [(range 75)]))
   (testing "sparse array"
     (test-coder (sparse-array 10 (constant true)) [{3 true, 7 true}])))

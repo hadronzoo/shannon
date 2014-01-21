@@ -1,4 +1,4 @@
-(defproject com.joshuagriffith/shannon "0.1.1-SNAPSHOT"
+(defproject com.joshuagriffith/shannon "0.1.1"
   :description "Extensible arithmetic coding toolkit"
   :url "https://github.com/hadronzoo/shannon"
   :license {:name "Eclipse Public License"

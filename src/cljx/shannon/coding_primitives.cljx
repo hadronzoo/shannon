@@ -70,7 +70,7 @@
     (doseq [s sym] (encode coder scoder s)))
   (decode [_ scoder]
     (let [cnt (decode countcoder scoder)]
-      (repeatedly cnt #(decode coder scoder)))))
+      (doall (repeatedly cnt #(decode coder scoder))))))
 
 (defn variable-array [coder countcoder]
   (VariableArrayCoder. coder countcoder))
