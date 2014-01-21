@@ -39,8 +39,7 @@
                    :rules :cljs}]}
 
   :cljsbuild {:builds {:test
-                       {:source-paths ["src/cljs" "test/cljs"
-                                       "target/src/cljs" "target/test/cljs"]
+                       {:source-paths ["target/src/cljs" "target/test/cljs"]
                         :compiler {:output-to "resources/private/js/unit-test.js"
                                    :optimizations :whitespace
                                    :pretty-print true}}}
