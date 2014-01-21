@@ -64,8 +64,8 @@
         (recur (dec j)))))
   bits)
 
-(deftype ArithmeticCoder #+clj [^double a ^double b ^long s ^double z bits]
-                         #+cljs [^number a ^number b ^number s ^number z bits]
+(deftype ArithmeticCoder #+clj [^double a ^double b ^long s ^double z bits last-sym]
+                         #+cljs [^number a ^number b ^number s ^number z bits last-sym]
   DistributionCoder
   (encode-symbol [_ distribution sym]
     (let [[a b] (->> (cdf distribution sym)
@@ -87,7 +87,7 @@
                     (< b (- whole quarter)))
              (recur (* 2. (- a quarter))
                     (* 2. (- b quarter)) (inc s))
-             (ArithmeticCoder. a b s z bits)))))))
+             (ArithmeticCoder. a b s z bits last-sym)))))))
 
   (decode-symbol [_ distribution]
     (letfn [(update-z [z bits] (if (read! bits) (inc z) z))]
@@ -109,14 +109,14 @@
              (if (and (> a quarter) (< b (- whole quarter)))
                (recur (* 2. (- a quarter)) (* 2. (- b quarter))
                       (double (update-z (* 2. (- z quarter)) bits)))
-               [sym (ArithmeticCoder. a b s z bits)])))))))
+               (ArithmeticCoder. a b s z bits sym))))))))
 
   BitCoder
   (with-bits! [_ newbits]
     (loop [i (dec coding-precision) z 0.]
       (if (>= i 0)
         (recur (dec i) (+ z (if (read! newbits) (pow 2 i) 0.)))
-        (ArithmeticCoder. a b s z newbits))))
+        (ArithmeticCoder. a b s z newbits nil))))
 
   (finalize! [_]
     (let [s (inc s)]
@@ -135,13 +135,9 @@
     (swap! coder (fn [coder]
                    (encode-symbol coder distribution sym))))
   (decode-symbol [_ distribution]
-    ;; Fix this hack now that the library is no longer monadic
-    (let [sym (atom nil)]
-      (swap! coder (fn [coder]
-                     (let [[s c] (decode-symbol coder distribution)]
-                       (reset! sym s)
-                       c)))
-      @sym))
+    (let [c (swap! coder (fn [coder]
+                           (decode-symbol coder distribution)))]
+      (.-last-sym c)))
 
   BitCoder
   (finalize! [_] (finalize! @coder))
@@ -150,8 +146,8 @@
   #+clj (close [_] (.close @coder)))
 
 (defn- empty-coder
-  ([] (ArithmeticCoder. 0. whole 0 0. nil))
-  ([bit-io] (ArithmeticCoder. 0. whole 0 0. bit-io)))
+  ([] (ArithmeticCoder. 0. whole 0 0. nil nil))
+  ([bit-io] (ArithmeticCoder. 0. whole 0 0. bit-io nil)))
 
 (defn input-stateful-coder [source]
   (StatefulCoder. (atom (with-bits! (empty-coder) source))))
