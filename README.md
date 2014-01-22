@@ -103,11 +103,17 @@ information and uses integers with Long ranges:
 
 ## To Do
 
-- Integration tests
+Currently, this library is more useful as a set of cross-platform,
+composeable encoding primitives rather than as a high-performance,
+universal compression library. Practical compression and runtime
+performance requires the addition of adaptive distribution
+primitives with caching rather than using generic, static distributions
+for each datatype. In addition, the following would be useful:
+
 - Tagged language strings
 - Tagged custom types
-- Caching / adaptive coding
-- Documentation
+- Clojure/Clojurescript integration tests
+- Improved documentation
 
 ## References
 
