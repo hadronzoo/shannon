@@ -104,12 +104,8 @@
 (defprotocol DiscreteDistribution
   (next-lower [o k])
   (next-higher [o k])
-  (cdf
-   #+clj [o k]
-   #+cljs [o k])
-  (inverse-cdf
-   #+clj [o interval]
-   #+cljs [o interval]))
+  (cdf [o k])
+  (inverse-cdf [o interval]))
 
 (defn- check-bounded-cdf [k N]
   {:pre [(integer? k) (<= 0 k (dec N))]})
