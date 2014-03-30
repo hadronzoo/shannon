@@ -36,6 +36,15 @@
           (recur e (dec i))))
       cnt)))
 
+(defn- symbol-index [table N n]
+  (loop [c 0 i (dec N) n n]
+    (if (>= i 0)
+      (let [j (get-in table [i c])]
+        (if (< n j)
+          (recur (* 2 c) (dec i) n)
+          (recur (inc (* 2 c)) (dec i) (- n j))))
+      c)))
+
 (defn- grow-table [N table sym-cnt]
   (let [new-N (inc N)]
     (reduce (fn [new-table sym-idx]
@@ -75,19 +84,12 @@
               0 (table-indices N sym-idx identity))
          (total-count o))))
   (inverse-cdf [o interval]
-    (letfn [(sym-idx [n]
-              (loop [c 0 i (dec N) n n]
-                (if (>= i 0)
-                  (let [j (get-in table [i c])]
-                    (if (< n j)
-                      (recur (* 2 c) (dec i) n)
-                      (recur (inc (* 2 c)) (dec i) (- n j))))
-                  c)))]
-      (let [[low high] (map (comp symbols sym-idx
-                                  #(round (floor (* (total-count o) %))))
-                            interval)]
-        (when (= low high)
-          low)))))
+    (let [[low high] (map (comp symbols
+                                #(symbol-index table N %)
+                                #(round (floor (* (total-count o) %))))
+                          interval)]
+      (when (= low high)
+        low))))
 
 (defn cft
   ([] (cft 5))
