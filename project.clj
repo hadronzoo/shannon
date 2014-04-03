@@ -7,7 +7,7 @@
                  [org.clojure/math.numeric-tower "0.0.4"]
                  [clj-time "0.6.0"]
                  [com.github.jinahya/bit-io "1.1"]
-                 [org.clojure/clojurescript "0.0-2197" :scope "provided"]
+                 [org.clojure/clojurescript "0.0-2156"]
                  [com.cemerick/clojurescript.test "0.3.0"]
                  [com.taoensso/timbre "3.1.6"]]
   :source-paths ["src/clj" "target/src/clj"]

@@ -4,9 +4,8 @@
             [shannon.compatibility :refer [round floor]]))
 
 (defprotocol AdaptiveDiscreteDistribution
-  (inc-symbol [o sym] [o sym cnt])
-  (symbol-count [o sym])
-  (total-count [o]))
+  (+symbol [o sym] [o sym cnt])
+  (symbol-count [o] [o sym]))
 
 (defn- table-indices [N index testfn]
   (for [i (range (inc N))
@@ -21,7 +20,7 @@
                         1)]]
          (vec (replicate Ni 0)))))
 
-(defn- inc-symbol-index [table N sym-idx cnt]
+(defn- +symbol-index [table N sym-idx cnt]
   (reduce
    (fn [table indices] (update-in table indices + cnt))
    table (table-indices N sym-idx not)))
@@ -50,13 +49,19 @@
     (reduce (fn [new-table sym-idx]
               (let [sym-cnt (symbol-index-count table N sym-idx)]
                 (when (pos? sym-cnt)
-                  (inc-symbol-index new-table new-N sym-idx sym-cnt))))
+                  (+symbol-index new-table new-N sym-idx sym-cnt))))
             (initial-table new-N) (range sym-cnt))))
 
 (deftype CumulativeFrequencyTable [N symbols indices table]
+  Object
+  (toString [o]
+    (str (into {} (map (fn [sym]
+                         [sym (cdf o sym)])
+                       symbols))))
+  
   AdaptiveDiscreteDistribution
-  (inc-symbol [o sym] (inc-symbol o sym 1))
-  (inc-symbol [o sym cnt]
+  (+symbol [o sym] (+symbol o sym 1))
+  (+symbol [o sym cnt]
     (let [sym-cnt (count symbols)
           in-cft? (contains? indices sym)
           table-full? (== sym-cnt (bit-shift-left 1 N))
@@ -65,11 +70,12 @@
           indices (if in-cft? indices (assoc indices sym sym-cnt))
           sym-idx (indices sym)
           table (-> (if table-full? (grow-table N table sym-cnt) table)
-                    (inc-symbol-index new-N sym-idx cnt))]
+                    (+symbol-index new-N sym-idx cnt))]
       (CumulativeFrequencyTable. new-N symbols indices table)))
+  (symbol-count [o] (get-in table [N 0]))
   (symbol-count [o sym]
-    (symbol-index-count table N (indices sym)))
-  (total-count [o] (get-in table [N 0]))
+    (when-let [sym-idx (indices sym)]
+      (symbol-index-count table N sym-idx)))
 
   DiscreteDistribution
   (next-lower [o sym]
@@ -82,11 +88,11 @@
     (when-let [sym-idx (indices sym)]
       (/ (reduce (fn [cnt indices] (+ cnt (get-in table indices)))
               0 (table-indices N sym-idx identity))
-         (total-count o))))
+         (symbol-count o))))
   (inverse-cdf [o interval]
     (let [[low high] (map (comp symbols
                                 #(symbol-index table N %)
-                                #(round (floor (* (total-count o) %))))
+                                #(round (floor (* (symbol-count o) %))))
                           interval)]
       (when (= low high)
         low))))
