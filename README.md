@@ -1,4 +1,4 @@
-# Shannon [![Build Status](https://travis-ci.org/hadronzoo/shannon.png?branch=master)](https://travis-ci.org/hadronzoo/shannon)
+# Shannon [![Build Status](https://travis-ci.org/hadronzoo/shannon.svg?branch=master)](https://travis-ci.org/hadronzoo/shannon)
 
 Arithmetic coding library for Clojure and Clojurescript.
 
